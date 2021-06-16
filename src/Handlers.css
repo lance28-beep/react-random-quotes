@@ -1,0 +1,22 @@
+.handlers {
+  position: absolute;
+  bottom: 10px;
+}
+
+.handlers > button {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 10px;
+  border-style: none;
+  color: white;
+  width: 100px;
+  padding: 10px;
+  margin-left: 100px;
+}
+
+.handlers > a {
+  margin-right: 100px;
+}
+.handlers > a:hover {
+  color: #fff;
+}

@@ -1,58 +1,83 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import './App.css'
+import { randomQoutes, selectCount } from './features/counterSlice'
+import Handlers from './Handlers'
+import Quotes from './Quotes'
 
 function App() {
+  const gquote = useSelector(selectCount)
+  const [qoutes, setqoutes] = useState([])
+  const dispatch = useDispatch(randomQoutes)
+  const colors = [
+    '#16a085',
+    '#27ae60',
+    '#2c3e50',
+    '#f39c12',
+    '#e74c3c',
+    '#9b59b6',
+    '#FB6964',
+    '#342224',
+    '#472E32',
+    '#BDBB99',
+    '#77B1A9',
+    '#73A857',
+  ]
+
+  const [backGround, setbackGround] = useState('#161623')
+  useEffect(() => {
+    axios
+      .get(
+        'https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json'
+      )
+      .then((res) => {
+        setqoutes(
+          res.data.quotes[
+            Math.floor(Math.random() * res.data.quotes.length - 1)
+          ]
+        )
+      })
+    return () => {}
+  }, [setqoutes])
+
+  const randomClickHandler = () => {
+    setbackGround(colors[Math.floor(Math.random() * colors.length - 1)])
+    axios
+      .get(
+        'https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json'
+      )
+      .then((res) => {
+        setqoutes(
+          res.data.quotes[
+            Math.floor(Math.random() * res.data.quotes.length - 1)
+          ]
+        )
+      })
+    dispatch(randomQoutes(qoutes))
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div className='App'>
+      <div
+        className='background__design'
+        style={{ backgroundColor: `${backGround}` }}
+      >
+        <div className='container'>
+          <div className='container__quotes' id='quote-box'>
+            {/* //random quote */}
+            <Quotes
+              quote={gquote?.quote || qoutes?.quote}
+              author={gquote?.author || qoutes?.author}
+            />
+            <Handlers Click={randomClickHandler} color={backGround} />
+            {/* icons  and buttons*/}
+            {/* <button onClick={randomClickHandler}>Random Quotes</button> */}
+          </div>
+        </div>
+      </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -1,0 +1,14 @@
+.quotes {
+  position: relative;
+}
+
+.quotes > h1 {
+  margin: 20px;
+  color: white;
+}
+
+.quotes > span {
+  position: absolute;
+  right: 20px;
+  color: aliceblue;
+}
